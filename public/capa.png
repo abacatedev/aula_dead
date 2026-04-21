@@ -1,0 +1,628 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+
+const Presentation = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    // Slide 0: Imagem de capa
+    {
+      type: 'image',
+      src: '/2.png',
+      alt: 'Capa da apresentação',
+    },
+
+    // Slide 1: Capa com Identificação da Disciplina
+    {
+      title: 'IA para Pesquisa Acadêmica',
+      subtitle: 'Otimizando a Busca, Mapeamento e Escrita Científica',
+      type: 'cover',
+      institution: 'UNEMAT - Universidade do Estado de Mato Grosso',
+      discipline: 'Especialização em Tecnologias Digitais e Educação Aberta',
+      course: 'Tecnologias Digitais de Informação e Comunicação Aplicada a Educação',
+    },
+
+    // Slide 2: Abertura / Contextualização
+    {
+      title: 'Por que a IA Transformou a Pesquisa Acadêmica?',
+      type: 'content',
+      content: [
+        {
+          heading: '🔍 Limitações das Ferramentas Tradicionais',
+          text: 'Google Acadêmico e Portal CAPES exigem buscas por palavras-chave, limitando a exploração de temas complexos.',
+        },
+        {
+          heading: '✨ O Diferencial das Ferramentas de IA',
+          text: 'Respondem perguntas naturais, mapeiam redes de conhecimento e dialogam com textos, acelerando a revisão da literatura.',
+        },
+        {
+          heading: '⚡ Resultado',
+          text: 'Pesquisa mais rápida, profunda e com melhor compreensão do tema.',
+        },
+      ],
+    },
+
+    // Slide 3: Ferramentas de Busca - Intro
+    {
+      title: 'Bloco 1: Ferramentas de Busca',
+      type: 'content',
+      content: [
+        {
+          heading: '🎯 Objetivo',
+          text: 'Responder perguntas de pesquisa com base em artigos científicos publicados.',
+        },
+        {
+          heading: '📚 Como Funcionam',
+          text: 'Você formula uma pergunta e a ferramenta retorna um resumo dos principais artigos científicos relacionados.',
+        },
+        {
+          heading: '💡 Benefício Principal',
+          text: 'Obtém um panorama rápido sobre um tema antes de iniciar a escrita do trabalho.',
+        },
+      ],
+    },
+
+    // Slide 4: Elicit
+    {
+      title: 'Ferramenta: Elicit',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'elicit.com',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Você formula uma pergunta de pesquisa e recebe um resumo dos principais artigos científicos relacionados, com destaque para publicações recentes.',
+        },
+        {
+          heading: '🎁 Vantagens',
+          text: 'Visão geral dos achados dentro do tema pesquisado. Versão gratuita e paga (versão paga amplia o acesso ao acervo).',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Pesquisadores que precisam de uma primeira visão abrangente sobre um tema.',
+        },
+      ],
+    },
+
+    // Slide 5: Consensus
+    {
+      title: 'Ferramenta: Consensus',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'consensus.app',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Responde perguntas de pesquisa com base em artigos revisados por pares e indica em percentuais se há consenso, contradição ou inconclusividade na literatura.',
+        },
+        {
+          heading: '📊 Diferencial',
+          text: 'Mostra dados em percentual: % de consenso, % de contradição, % de dados inconclusos.',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Obter um panorama rápido sobre questões controversas antes de iniciar a escrita.',
+        },
+      ],
+    },
+
+    // Slide 6: CSpace
+    {
+      title: 'Ferramenta: CSpace',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'cspace.com',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Permite diálogo direto com artigos selecionados por meio de bate-papo com PDF, além de oferecer recursos de escrita assistida por IA.',
+        },
+        {
+          heading: '💬 Exemplos de Perguntas',
+          text: '"Quais são os principais resultados?" | "Como os autores conduziram a pesquisa?" | "Qual é a metodologia utilizada?"',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Pesquisadores que querem compreender profundamente os artigos selecionados.',
+        },
+      ],
+    },
+
+    // Slide 7: Perplexity
+    {
+      title: 'Ferramenta: Perplexity',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'perplexity.ai',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Permite delimitar a busca especificamente para artigos científicos, retornando respostas fundamentadas com links diretos para as fontes.',
+        },
+        {
+          heading: '🔍 Diferencial',
+          text: 'Busca na web em tempo real com citação das fontes utilizadas. Mostra exatamente onde cada informação foi obtida.',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Pesquisadores que precisam rastrear exatamente de onde vem cada informação.',
+        },
+      ],
+    },
+
+    // Slide 8: Ferramentas de Mapeamento - Intro
+    {
+      title: 'Bloco 2: Ferramentas de Mapeamento',
+      type: 'content',
+      content: [
+        {
+          heading: '🎯 Objetivo',
+          text: 'Criar mapas visuais de conexões entre artigos, autores e temas.',
+        },
+        {
+          heading: '🗺️ Como Funcionam',
+          text: 'A partir de um artigo de referência, geram mapas com artigos relacionados, mostrando conexões e tendências.',
+        },
+        {
+          heading: '💡 Benefício Principal',
+          text: 'Identificar as principais pesquisas desenvolvidas, tópicos recorrentes e conexões entre produções científicas.',
+        },
+      ],
+    },
+
+    // Slide 9: Litmaps
+    {
+      title: 'Ferramenta: Litmaps',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'litmaps.com',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'A partir de um artigo de referência (especialmente obras seminais), gera um mapa visual com todos os artigos relacionados.',
+        },
+        {
+          heading: '📊 Visualização',
+          text: 'Mostra as principais pesquisas, tópicos recorrentes e conexões entre as produções em um mapa interativo.',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Revisão de literatura aprofundada e identificação de tendências de uma área de pesquisa.',
+        },
+      ],
+    },
+
+    // Slide 10: Research Rabbit
+    {
+      title: 'Ferramenta: Research Rabbit',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'researchrabbitapp.com',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Similar ao Litmaps, mas com interface mais flexível. Mapeia obras em diferentes graus de proximidade conceitual.',
+        },
+        {
+          heading: '👥 Colaboração',
+          text: 'Permite compartilhar coleções entre pesquisadores que usam o mesmo login, facilitando trabalho colaborativo.',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Pesquisa em grupo e mapeamento com maior flexibilidade de navegação.',
+        },
+      ],
+    },
+
+    // Slide 11: Ferramentas de Leitura - Intro
+    {
+      title: 'Bloco 3: Ferramentas de Leitura e Compreensão',
+      type: 'content',
+      content: [
+        {
+          heading: '🎯 Objetivo',
+          text: 'Resumir e compreender o conteúdo dos artigos selecionados.',
+        },
+        {
+          heading: '📖 Como Funcionam',
+          text: 'Processam arquivos (PDF, Word, YouTube) e geram resumos, fichamentos e análises.',
+        },
+        {
+          heading: '💡 Benefício Principal',
+          text: 'Economiza tempo na leitura e facilita a compreensão profunda dos trabalhos científicos.',
+        },
+      ],
+    },
+
+    // Slide 12: NotebookLM
+    {
+      title: 'Ferramenta: NotebookLM',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'notebooklm.google.com (Gratuito)',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Insira arquivos em Word, PDF e vídeos do YouTube como fontes. Solicite resumos, fichamentos, resenhas críticas ou esboços.',
+        },
+        {
+          heading: '📊 Recursos',
+          text: 'Suporta múltiplos arquivos simultaneamente. Organiza suas anotações em um único espaço.',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Organização completa da leitura e produção de resumos estruturados.',
+        },
+      ],
+    },
+
+    // Slide 13: ChatGPT Leitura
+    {
+      title: 'Ferramenta: ChatGPT (Leitura)',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'chat.openai.com',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Insira arquivos diretamente e solicite resumos, análises de argumentação ou revisão gramatical.',
+        },
+        {
+          heading: '💬 Tipos de Pedidos',
+          text: 'Resumos executivos | Análise de metodologia | Crítica argumentativa | Revisão de texto',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Análise rápida e revisão de qualidade de leitura.',
+        },
+      ],
+    },
+
+    // Slide 14: Ferramentas de Escrita - Intro
+    {
+      title: 'Bloco 4: Ferramentas de Escrita e Revisão',
+      type: 'content',
+      content: [
+        {
+          heading: '🎯 Objetivo',
+          text: 'Auxiliar na produção e aprimoramento do texto acadêmico.',
+        },
+        {
+          heading: '✍️ Como Funcionam',
+          text: 'Ajudam a construir esboços, revisar argumentação, melhorar coesão e incluir citações.',
+        },
+        {
+          heading: '💡 Benefício Principal',
+          text: 'Acelera a escrita sem comprometer a profundidade argumentativa.',
+        },
+      ],
+    },
+
+    // Slide 15: ChatGPT/Gemini Escrita
+    {
+      title: 'Ferramentas: ChatGPT / Gemini',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'chat.openai.com | gemini.google.com',
+        },
+        {
+          heading: '⚙️ Funcionalidades',
+          text: 'Constroem esboços de introdução, metodologia e fundamentação teórica a partir de prompts bem elaborados.',
+        },
+        {
+          heading: '🔧 Recursos Adicionais',
+          text: 'Revisores gramaticais | Análise de coerência argumentativa | Sugestões de estrutura',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Começar a escrita e revisar a qualidade do texto produzido.',
+        },
+      ],
+    },
+
+    // Slide 16: Jenni AI
+    {
+      title: 'Ferramenta: Jenni AI',
+      type: 'content',
+      content: [
+        {
+          heading: '🌐 Acesso',
+          text: 'jenni.ai',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Assistente de escrita que, conforme você digita, sugere automaticamente continuações do texto.',
+        },
+        {
+          heading: '📚 Recursos Especiais',
+          text: 'Indica automaticamente autores | Inclui citações alinhadas à ideia | Oferece referências bibliográficas',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Acelerar a escrita sem comprometer a profundidade ou perder citações de autores importantes.',
+        },
+      ],
+    },
+
+    // Slide 17: Ferramentas de Análise de Dados
+    {
+      title: 'Bloco 5: Ferramenta de Análise de Dados',
+      type: 'content',
+      content: [
+        {
+          heading: '🎯 Objetivo',
+          text: 'Analisar dados brutos e gerar visualizações automaticamente.',
+        },
+        {
+          heading: '🌐 Acesso',
+          text: 'julius.ai',
+        },
+        {
+          heading: '⚙️ Como Funciona',
+          text: 'Insira dados brutos, realize buscas semânticas, gere visualizações e gráficos de forma automatizada.',
+        },
+        {
+          heading: '👥 Ideal Para',
+          text: 'Pesquisadores com grandes volumes de dados que precisam de sistematização ágil.',
+        },
+      ],
+    },
+
+    // Slide 18: Fluxo Completo
+    {
+      title: 'Síntese: Fluxo Completo de Trabalho',
+      type: 'content',
+      content: [
+        {
+          heading: '1️⃣ BUSCA',
+          text: 'Use Elicit ou Consensus para identificar artigos relevantes sobre o tema.',
+        },
+        {
+          heading: '2️⃣ MAPEAMENTO',
+          text: 'Alimente Litmaps ou Research Rabbit com os artigos encontrados para mapear a rede teórica.',
+        },
+        {
+          heading: '3️⃣ COMPREENSÃO',
+          text: 'Use NotebookLM ou ChatGPT para resumir e compreender os artigos selecionados.',
+        },
+        {
+          heading: '4️⃣ ESCRITA & ANÁLISE',
+          text: 'Redija com Jenni AI ou ChatGPT e analise dados com Julius AI.',
+        },
+      ],
+    },
+
+    // Slide 19: Conclusão
+    {
+      title: 'Conclusão: Transformando Sua Pesquisa',
+      type: 'content',
+      content: [
+        {
+          heading: '🚀 Potencial da IA',
+          text: 'As ferramentas de IA não substituem o pesquisador, mas o capacitam para trabalhar mais inteligentemente.',
+        },
+        {
+          heading: '⏱️ Economia de Tempo',
+          text: 'Automação de tarefas repetitivas: busca, resumo, mapeamento, análise e revisão.',
+        },
+        {
+          heading: '📊 Maior Profundidade',
+          text: 'Exploração de temas complexos com melhor compreensão e conexão entre ideias.',
+        },
+        {
+          heading: '✨ Melhor Qualidade',
+          text: 'Textos mais bem estruturados, argumentação mais sólida e pesquisa mais completa.',
+        },
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      } else if (event.key === 'ArrowLeft') {
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [slides.length]);
+
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const handleSlideClick = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const slide = slides[currentSlide];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex flex-col items-center justify-center p-4">
+      {/* Main Slide Container */}
+      <div className="w-full max-w-7xl aspect-video bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden">
+        {/* Slide Content */}
+        <div className="flex-1 flex flex-col relative">
+
+          {/* ── TIPO: image ── */}
+          {slide.type === 'image' && (
+            <div className="w-full h-full relative">
+              <Image
+                src={(slide as { type: 'image'; src: string; alt: string }).src}
+                alt={(slide as { type: 'image'; src: string; alt: string }).alt}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          )}
+
+          {/* ── TIPO: cover ── */}
+          {slide.type === 'cover' && (
+            <>
+              {/* Left accent bar */}
+              <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-green-500 via-blue-500 to-yellow-400" />
+
+              <div className="flex-1 flex flex-col items-center justify-center p-16 bg-white relative overflow-hidden">
+                {/* Decorative corners */}
+                <div className="absolute top-0 left-0 w-32 h-32">
+                  <div className="w-24 h-1 bg-teal-500 absolute top-6 left-6" />
+                  <div className="h-24 w-1 bg-teal-500 absolute top-6 left-6" />
+                  <div className="w-3 h-3 bg-yellow-400 absolute top-6 right-0" />
+                </div>
+                <div className="absolute bottom-0 right-0 w-32 h-32">
+                  <div className="w-24 h-1 bg-teal-500 absolute bottom-6 right-6" />
+                  <div className="h-24 w-1 bg-teal-500 absolute bottom-6 right-6" />
+                  <div className="w-3 h-3 bg-yellow-400 absolute bottom-6 left-0" />
+                </div>
+
+                <div className="flex flex-col items-center justify-center z-10">
+                  {/* Logos */}
+                  <div className="flex items-center justify-center gap-8 mb-8">
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-gray-800 mb-1">UNEMAT</div>
+                      <div className="text-xs text-gray-600 max-w-24">Universidade do Estado de Mato Grosso</div>
+                    </div>
+                    <div className="w-px h-16 bg-gray-300" />
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-teal-600 mb-1">DEAD</div>
+                      <div className="text-xs text-gray-600 max-w-28">Diretoria de Gestão de Educação a Distância</div>
+                    </div>
+                    <div className="w-px h-16 bg-gray-300" />
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-blue-600 mb-1">UAB</div>
+                      <div className="text-xs text-gray-600 max-w-28">Universidade Aberta do Brasil</div>
+                    </div>
+                  </div>
+
+                  <h1 className="text-5xl font-bold text-center mb-6 text-gray-800 max-w-3xl leading-tight">
+                    {(slide as any).title}
+                  </h1>
+
+                  <div className="text-center mb-8 max-w-3xl">
+                    <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+                      {(slide as any).discipline}
+                    </h2>
+                    <p className="text-base text-gray-600 leading-relaxed">
+                      {(slide as any).course}
+                    </p>
+                  </div>
+
+                  <p className="text-xl text-center text-gray-600 mb-8 max-w-2xl italic">
+                    {(slide as any).subtitle}
+                  </p>
+
+                  <div className="w-32 h-1 bg-gradient-to-r from-teal-500 via-blue-500 to-yellow-400 rounded" />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ── TIPO: content ── */}
+          {slide.type === 'content' && (
+            <>
+              {/* Left accent bar */}
+              <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-green-500 via-blue-500 to-yellow-400" />
+
+              <div className="flex-1 flex flex-col p-12 pl-16 justify-start bg-white">
+                <h2 className="text-4xl font-bold text-gray-800 mb-8 border-b-4 border-green-500 pb-4">
+                  {(slide as any).title}
+                </h2>
+
+                <div className="flex-1 space-y-5 text-lg">
+                  {(slide as any).content.map(
+                    (item: { heading: string; text: string }, idx: number) => (
+                      <div key={idx} className="flex gap-4">
+                        <div className="flex-shrink-0 w-1 bg-gradient-to-b from-green-500 to-blue-500 rounded" />
+                        <div className="flex-1">
+                          <h3 className="font-bold text-gray-800 mb-1">{item.heading}</h3>
+                          <p className="text-gray-700 leading-relaxed">{item.text}</p>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Footer — oculto no slide de imagem para não cobrir a capa */}
+        {slide.type !== 'image' && (
+          <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-12 py-4 flex justify-between items-center">
+            <span className="text-sm font-semibold">UNEMAT - Educação a Distância</span>
+            <span className="text-sm font-semibold">
+              Slide {currentSlide + 1} de {slides.length}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Navigation Controls */}
+      <div className="flex items-center gap-8 mt-8">
+        <button
+          onClick={handlePrev}
+          className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition-colors shadow-lg"
+          aria-label="Slide anterior"
+        >
+          <ChevronLeft size={24} />
+        </button>
+
+        <div className="flex gap-2 flex-wrap justify-center max-w-2xl">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSlideClick(idx)}
+              className={`h-3 rounded-full transition-all ${
+                idx === currentSlide ? 'bg-blue-600 w-8' : 'bg-gray-400 hover:bg-gray-500 w-3'
+              }`}
+              aria-label={`Ir para slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={handleNext}
+          className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition-colors shadow-lg"
+          aria-label="Próximo slide"
+        >
+          <ChevronRight size={24} />
+        </button>
+      </div>
+
+      <div className="mt-6 text-white text-sm text-center">
+        <p>Use os botões ou teclado (← →) para navegar</p>
+      </div>
+    </div>
+  );
+};
+
+export default Presentation;
